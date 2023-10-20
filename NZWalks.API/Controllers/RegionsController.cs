@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NZWalks.API.Models.Domain;
+using NZWalks.API.Repositories;
 
 namespace NZWalks.API.Controllers
 {
@@ -7,15 +7,16 @@ namespace NZWalks.API.Controllers
     [Route("[controller]")]
     public class RegionsController : Controller
     {
+        private readonly IRegionRepository regionRepository;
+
+        public RegionsController(IRegionRepository regionRepository)
+        {
+            this.regionRepository = regionRepository;
+        }
+
         [HttpGet] 
         public IActionResult GetAllRegions() {
-            var regions = new List<Region>()
-            {
-                new Region
-                {
-                    Name= "Wellington"
-                }
-            };
+            var regions = regionRepository.getAllRegions();
             return Ok(regions);
         }
     }
