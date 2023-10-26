@@ -84,5 +84,70 @@ namespace NZWalks.API.Controllers
             };
             return CreatedAtAction(nameof(GetRegionById),new {id = region.Id},regionDTO);
         }
+
+        [HttpDelete]
+        [Route("{id:guid}")]
+        public async Task<IActionResult> DeleteRegionAsync(Guid id)
+        {
+            //Get Region from DB
+            var region = await regionRepository.DeleteAsync(id); ;
+
+            //If null return NotFound
+            if(region == null)
+            {
+                return NotFound();
+            }
+
+            //Convert response to DTO
+            var regionDTO = new Models.DTO.Region
+            {
+                Id = region.Id,
+                Code = region.Code,
+                Area = region.Area,
+                Lat = region.Lat,
+                Long = region.Long,
+                Name = region.Name,
+                Population = region.Population,
+            };
+
+            //Return Ok
+            return Ok(regionDTO);
+        }
+
+        [HttpPut]
+        [Route("{id:guid}")]
+        public async Task<IActionResult> updateRegionAsync([FromRoute] Guid id, [FromBody] UpdateRegionRequest updatedRegion)
+        {
+            //Convert DTO to Domain Model
+            var region = new Models.Domain.Region()
+            {
+                Code = updatedRegion.Code,
+                Area = updatedRegion.Area,
+                Lat = updatedRegion.Lat,
+                Long = updatedRegion.Long,
+                Name = updatedRegion.Name,
+                Population = updatedRegion.Population,
+            };
+            //Update Region using Repo
+            region = await regionRepository.updateAsync(id,region);
+            //If null then return NotFound
+            if(region == null)
+            {
+                return NotFound();
+            }
+            //Convert Domain back to DTO
+            var regionDTO = new Models.DTO.Region
+            {
+                Id = region.Id,
+                Code = updatedRegion.Code,
+                Area = updatedRegion.Area,
+                Lat = updatedRegion.Lat,
+                Long = updatedRegion.Long,
+                Name = updatedRegion.Name,
+                Population = updatedRegion.Population,
+            };
+            //Return OK
+            return Ok(regionDTO); 
+        }
     }
 }

@@ -30,5 +30,40 @@ namespace NZWalks.API.Repositories
             return region;
         }
 
+        public async Task<Region> DeleteAsync(Guid id)
+        {
+            var region = await context.Regions.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (region == null)
+            {
+                return null;
+            }
+            
+            //Delete the region
+
+            context.Regions.Remove(region);
+            await context.SaveChangesAsync();
+            return region;
+        }
+
+        public async Task<Region> updateAsync(Guid id, Region region)
+        {
+            var exisitngRegion = await context.Regions.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (exisitngRegion == null)
+            {
+                return null;
+            }
+
+            exisitngRegion.Code = region.Code;
+            exisitngRegion.Walk = region.Walk;
+            exisitngRegion.Name = region.Name;
+            exisitngRegion.Lat = region.Lat;
+            exisitngRegion.Long = region.Long;
+            exisitngRegion.Area = region.Area;
+
+            await context.SaveChangesAsync();
+            return exisitngRegion;
+        }
     }
 }
