@@ -75,12 +75,12 @@ namespace NZWalks.API.Controllers
             var regionDTO = new Models.DTO.Region
             {
                 Id = region.Id,
-                Code = addRegionRequest.Code,
-                Area = addRegionRequest.Area,
-                Lat = addRegionRequest.Lat,
-                Long = addRegionRequest.Long,
-                Name = addRegionRequest.Name,
-                Population = addRegionRequest.Population,
+                Code = region.Code,
+                Area = region.Area,
+                Lat = region.Lat,
+                Long = region.Long,
+                Name = region.Name,
+                Population = region.Population,
             };
             return CreatedAtAction(nameof(GetRegionById),new {id = region.Id},regionDTO);
         }
